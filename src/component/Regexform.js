@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import './Regex.css';
 
 function Form() {
   const [formData, setFormData] = useState({
