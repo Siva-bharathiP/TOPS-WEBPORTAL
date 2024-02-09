@@ -1,0 +1,32 @@
+.Container {
+    height : 90%;
+    width : 40%;
+    text-align: center;
+    border : 1px solid black;
+    margin : 110px auto;
+    padding : 30px;
+    background-color:ghostwhite;
+    
+    
+}
+.Form-Container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.Input-Txt {
+    width : 250px;
+    height: 35px;
+    margin: 30px;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-size: medium;
+    border : 1.5px solid black;
+    border-radius: 4px;
+
+}
+
+.label-txt {
+    font-size: large;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    padding-right: 52px;
+}
