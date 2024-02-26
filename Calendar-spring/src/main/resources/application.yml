@@ -1,7 +1,0 @@
-google:
-  api:
-    credentials:
-      file: D:\SpringBoot\Calendar-spring\src\main\resources\credentials.json
-    tokens:
-      directory: D:\SpringBoot\Calendar-spring\src\main\resources\Tokens-Dir
-    scopes: ["https://www.googleapis.com/auth/calendar"]

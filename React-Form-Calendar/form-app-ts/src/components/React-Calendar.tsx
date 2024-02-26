@@ -16,3 +16,17 @@
 // }
 
 // export default calendar;
+
+
+import { FC } from "react";
+
+const EventDetails: FC<{ title: string }> = ({ title }) => {
+  return (
+    <div>
+      <h3>Event Details</h3>
+      <p>Title: {title}</p>
+    </div>
+  );
+};
+
+export default EventDetails;

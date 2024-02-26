@@ -14,9 +14,11 @@ import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.time.Instant;
-import com.SpringGoogle.Calendarspring.CalendarController;
+import org.springframework.stereotype.Service;
+import org.springframework.scheduling.annotation.Scheduled;
 import java.time.format.DateTimeFormatter;
 
+@Service
 public class CalendarService {
 
     private final Calendar calendar;
@@ -32,7 +34,6 @@ public class CalendarService {
                     .setApplicationName("Google Calendar API Spring Boot")
                     .build();
         } catch (GeneralSecurityException | IOException e) {
-
             e.printStackTrace();
             throw e;
         }
@@ -49,13 +50,36 @@ public class CalendarService {
         return events.getItems();
     }
 
+    @Scheduled(fixedDelay = 60000)
+    public List<Event> fetchEventsPeriodically()throws IOException  {
+        try {
+            DateTime now = new DateTime(System.currentTimeMillis());
+            Events events = calendar.events().list("primary")
+                    .setMaxResults(10)
+                    .setTimeMin(now)
+                    .setOrderBy("startTime")
+                    .setSingleEvents(true)
+                    .execute();
+            List<Event> upcomingEvents = events.getItems();
+            return upcomingEvents;
+        } catch (IOException e) {
+            // Handle exceptions, log, or notify administrators
+            e.printStackTrace();
+        }return Collections.emptyList();
+    }
+
 
     public String formatDateTime(DateTime dateTime) {
         Instant instant = Instant.ofEpochMilli(dateTime.getValue());
-
         LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-
         return localDateTime.format(dateTimeFormatter);
     }
+    public Event createEvent(Event event) throws IOException, GeneralSecurityException {
+
+        return calendar.events().insert("primary", event).execute();
+    }
+
+
+
 
 }
