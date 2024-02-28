@@ -50,23 +50,24 @@ public class CalendarService {
         return events.getItems();
     }
 
-    @Scheduled(fixedDelay = 60000)
-    public List<Event> fetchEventsPeriodically()throws IOException  {
+    @Scheduled(fixedRate = 30000)
+    public List<Event> fetchLatestEvents() {
         try {
             DateTime now = new DateTime(System.currentTimeMillis());
             Events events = calendar.events().list("primary")
-                    .setMaxResults(10)
+                    .setMaxResults(1)
                     .setTimeMin(now)
                     .setOrderBy("startTime")
                     .setSingleEvents(true)
                     .execute();
-            List<Event> upcomingEvents = events.getItems();
-            return upcomingEvents;
+            List<Event> latestEvents = events.getItems();
+            return latestEvents;
         } catch (IOException e) {
-            // Handle exceptions, log, or notify administrators
             e.printStackTrace();
-        }return Collections.emptyList();
+            return Collections.emptyList();
+        }
     }
+
 
 
     public String formatDateTime(DateTime dateTime) {
@@ -78,8 +79,6 @@ public class CalendarService {
 
         return calendar.events().insert("primary", event).execute();
     }
-
-
 
 
 }

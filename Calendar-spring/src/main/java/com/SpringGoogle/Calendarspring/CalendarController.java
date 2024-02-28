@@ -36,7 +36,7 @@
 
         @GetMapping("/Events")
         public List<Event> fetchCalendarEvents() throws IOException {
-            return calendarService.fetchEventsPeriodically();
+            return calendarService.fetchLatestEvents();
         }
 
         @PostMapping("/create-event")
