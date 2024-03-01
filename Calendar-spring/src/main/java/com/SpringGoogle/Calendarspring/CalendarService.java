@@ -68,8 +68,6 @@ public class CalendarService {
         }
     }
 
-
-
     public String formatDateTime(DateTime dateTime) {
         Instant instant = Instant.ofEpochMilli(dateTime.getValue());
         LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());

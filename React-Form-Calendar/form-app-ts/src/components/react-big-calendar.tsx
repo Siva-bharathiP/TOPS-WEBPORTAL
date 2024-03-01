@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -10,24 +10,63 @@ interface Event {
   title: string;
   start: Date;
   end: Date;
+  attendees: { email: string; responseStatus: string }[];
+  conferenceData: {
+    conferenceId: string;
+    conferenceSolution: {
+      iconUri: string;
+      key: { type: string };
+      name: string;
+    };
+    entryPoints: { entryPointType: string; label?: string; uri: string }[];
+  };
+  created: { value: number; dateOnly: boolean; timeZoneShift: number };
+  creator: { email: string; self: boolean };
+  eventType: string;
+  hangoutLink: string;
+  htmlLink: string;
+  iCalUID: string;
+  kind: string;
+  organizer: { email: string; self: boolean };
+  reminders: { useDefault: boolean };
+  sequence: number;
+  status: string;
+  summary: string;
+  updated: { value: number; dateOnly: boolean; timeZoneShift: number };
 }
 
 const MyCalendar: React.FC = () => {
   const localizer = momentLocalizer(moment);
-  const [events, setEvents] = useState<Event[]>([
-    {
-      id: "1",
-      title: "Event 1",
-      start: new Date(),
-      end: moment().add(1, "hour").toDate(),
-    },
-    {
-      id: "2",
-      title: "Event 2",
-      start: moment().add(2, "hours").toDate(),
-      end: moment().add(3, "hours").toDate(),
-    },
-  ]);
+  const [events, setEvents] = useState<Event[]>([]);
+
+  const fetchEvents = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/Events");
+      const eventData = await response.json();
+
+      const transformedEvents = eventData.map((event: any) => {
+        const title = new String(event.summary);
+        const startDateTime = new Date(event.start.dateTime.value);
+        const endDateTime = new Date(event.end.dateTime.value);
+
+        return {
+          ...event,
+          title: title,
+          start: startDateTime,
+          end: endDateTime,
+        };
+      });
+
+      setEvents(transformedEvents);
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
   const [isAddingEvent, setIsAddingEvent] = useState<boolean>(false);
   const [isEditingEvent, setIsEditingEvent] = useState<boolean>(false);
   const [newEventDate, setNewEventDate] = useState<Date | null>(null);
@@ -66,7 +105,7 @@ const MyCalendar: React.FC = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newEventPayload), // Send the payload
+        body: JSON.stringify(newEventPayload),
       });
 
       if (response.ok) {
@@ -76,6 +115,29 @@ const MyCalendar: React.FC = () => {
           title: newEventTitle.trim(),
           start: newEventDate,
           end: moment(newEventDate).add(1, "hour").toDate(),
+          attendees: [],
+          conferenceData: {
+            conferenceId: "",
+            conferenceSolution: {
+              iconUri: "",
+              key: { type: "" },
+              name: "",
+            },
+            entryPoints: [],
+          },
+          created: { value: 0, dateOnly: false, timeZoneShift: 0 },
+          creator: { email: "", self: false },
+          eventType: "",
+          hangoutLink: "",
+          htmlLink: "",
+          iCalUID: "",
+          kind: "",
+          organizer: { email: "", self: false },
+          reminders: { useDefault: false },
+          sequence: 0,
+          status: "",
+          summary: "",
+          updated: { value: 0, dateOnly: false, timeZoneShift: 0 },
         };
 
         // Update the events state
@@ -84,7 +146,7 @@ const MyCalendar: React.FC = () => {
         setNewEventDate(null);
         setNewEventTitle("");
       } else {
-        console.error("Failed to create event in Google Calendar");
+        console.error("Failed to create event: Missing title or date");
       }
     }
   };
