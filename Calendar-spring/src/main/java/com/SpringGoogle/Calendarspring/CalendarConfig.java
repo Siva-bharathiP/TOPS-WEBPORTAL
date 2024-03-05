@@ -51,18 +51,6 @@
             return new DateTime(System.currentTimeMillis());
         }
 
-        @Bean
-        public Calendar getCalendarService() throws IOException, GeneralSecurityException {
-            NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-            Credential credential = getCredentials(HTTP_TRANSPORT);
-            return new Calendar.Builder(
-                    GoogleNetHttpTransport.newTrustedTransport(),
-                    JSON_FACTORY,
-                    credential)
-                    .setApplicationName(APPLICATION_NAME)
-                    .build();
-        }
-
 
         @Bean
         public Credential getCredentials(final NetHttpTransport netHttpTransport) throws IOException, GeneralSecurityException {

@@ -26,7 +26,6 @@ dependencies {
 	implementation ("com.google.api-client:google-api-client-gson:1.34.1")
 	implementation ("com.fasterxml.jackson.core:jackson-databind:2.14.2")
 
-
 }
 
 tasks.withType<Test> {

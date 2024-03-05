@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class CalendarSpringApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(CalendarSpringApplication.class, args);
 	}
 

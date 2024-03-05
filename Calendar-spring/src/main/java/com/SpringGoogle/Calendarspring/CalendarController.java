@@ -10,7 +10,6 @@
     import org.springframework.http.HttpStatus;
     import java.io.IOException;
     import java.security.GeneralSecurityException;
-    import java.util.Collections;
     import java.util.List;
     import com.google.api.client.util.DateTime;
     import java.time.format.DateTimeFormatter;
